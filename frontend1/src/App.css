@@ -1,0 +1,22 @@
+/* 🔹 SAFE RESET (margin remove mat karo) */
+* {
+  box-sizing: border-box;
+}
+
+/* 🔹 Body */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f2f4f7;
+  margin: 0; /* sirf body ka reset */
+}
+
+/* 🔹 Links */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* 🔹 Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}

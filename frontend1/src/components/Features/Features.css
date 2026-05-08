@@ -1,0 +1,158 @@
+.features {
+  width: 92%;
+
+  margin: 15px auto 30px;   /* 👈 top-bottom spacing kam */
+
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 18px;   /* 👈 cards ke beech ka gap kam */
+
+  position: relative;
+}
+
+/* CARD */
+
+.card {
+  position: relative;
+
+  background: rgba(255, 255, 255, 0.92);
+
+  border-radius: 18px;
+
+  padding: 22px 18px;   /* 👈 card chota */
+
+  text-align: center;
+
+  overflow: hidden;
+
+  cursor: pointer;
+
+  transition: all 0.35s ease;
+
+  box-shadow:
+    0 3px 10px rgba(0, 0, 0, 0.05),
+    0 2px 5px rgba(37, 99, 235, 0.05);
+
+  min-height: 185px;   /* 👈 height kam */
+}
+
+/* HOVER */
+
+.card:hover {
+  transform: translateY(-6px);
+
+  box-shadow:
+    0 10px 24px rgba(37, 99, 235, 0.10);
+}
+
+/* ICON */
+
+.icon {
+  width: 58px;
+  height: 58px;
+
+  margin: 0 auto 14px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 50%;
+
+  position: relative;
+
+  z-index: 2;
+}
+
+/* ICON COLORS */
+
+.card:nth-child(1) .icon {
+  background: #edf4ff;
+  color: #2563eb;
+}
+
+.card:nth-child(2) .icon {
+  background: #ecfdf5;
+  color: #10b981;
+}
+
+.card:nth-child(3) .icon {
+  background: #f5efff;
+  color: #a855f7;
+}
+
+/* TITLE */
+
+.card h3 {
+  font-size: 20px;   /* 👈 text chota */
+
+  color: #0f1f53;
+
+  margin-bottom: 10px;
+
+  font-weight: 700;
+
+  position: relative;
+  z-index: 2;
+}
+
+/* TEXT */
+
+.card p {
+  font-size: 13px;
+
+  line-height: 1.5;
+
+  color: #64748b;
+
+  max-width: 240px;
+
+  margin: auto;
+
+  position: relative;
+  z-index: 2;
+}
+
+/* WAVE */
+
+.card::after {
+  content: "";
+
+  position: absolute;
+
+  bottom: -8px;
+  left: -5%;
+
+  width: 110%;
+  height: 50px;   /* 👈 wave bhi choti */
+
+  border-radius: 50% 50% 0 0;
+}
+
+/* DIFFERENT WAVES */
+
+.card:nth-child(1)::after {
+  background: rgba(96, 165, 250, 0.12);
+}
+
+.card:nth-child(2)::after {
+  background: rgba(16, 185, 129, 0.12);
+}
+
+.card:nth-child(3)::after {
+  background: rgba(168, 85, 247, 0.12);
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1100px) {
+
+  .features {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    min-height: auto;
+  }
+}

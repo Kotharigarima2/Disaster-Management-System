@@ -1,0 +1,426 @@
+/* 🌈 BACKGROUND */
+body {
+  background: linear-gradient(135deg, #f5f3ff, #eef2ff, #fdf2f8);
+  min-height: 100vh;
+  font-family: "Poppins", sans-serif;
+  overflow-x: hidden;
+}
+
+/* 🌟 MAIN CARD */
+.humanneeds-container {
+  max-width: 1180px;
+
+  margin: 18px auto;
+  padding: 28px 34px;
+
+  border-radius: 32px;
+
+  background: rgba(255, 255, 255, 0.72);
+
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+
+  border: 1px solid rgba(255, 255, 255, 0.6);
+
+  box-shadow:
+    0 8px 30px rgba(140, 120, 255, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+
+  position: relative;
+  overflow: hidden;
+}
+
+/* ✨ TOP RIGHT SHAPE */
+.humanneeds-container::before {
+  content: "";
+
+  position: absolute;
+  top: -120px;
+  right: -120px;
+
+  width: 320px;
+  height: 320px;
+
+  border-radius: 50%;
+
+  background: linear-gradient(
+    135deg,
+    rgba(167, 139, 250, 0.28),
+    rgba(96, 165, 250, 0.10)
+  );
+
+  z-index: 0;
+}
+
+/* ✨ BOTTOM LEFT SHAPE */
+.humanneeds-container::after {
+  content: "";
+
+  position: absolute;
+  bottom: -130px;
+  left: -120px;
+
+  width: 280px;
+  height: 280px;
+
+  border-radius: 50%;
+
+  background: linear-gradient(
+    135deg,
+    rgba(244, 114, 182, 0.12),
+    rgba(192, 132, 252, 0.14)
+  );
+
+  z-index: 0;
+}
+
+/* 🔥 HEADER */
+.humanneeds-header {
+  position: relative;
+  z-index: 2;
+
+  margin-bottom: 18px;
+}
+
+/* 🔙 BACK BUTTON */
+.back-btn-wrapper {
+  position: absolute;
+  left: -6px;
+  top: 4px;
+
+  transform: scale(0.9);
+}
+
+/* 🎯 TITLE */
+.humanneeds-title {
+  text-align: center;
+
+  font-size: 30px;
+  font-weight: 800;
+
+  color: #0f172a;
+
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+/* ✨ SUBTITLE */
+.humanneeds-title::after {
+  content: "AI-powered analysis of tweets to detect urgent human needs";
+
+  display: block;
+
+  margin-top: 8px;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  color: #6b7280;
+}
+
+/* ✍️ TEXTAREA */
+.humanneeds-textarea {
+  position: relative;
+  z-index: 2;
+
+  width: 100%;
+  min-height: 90px;
+
+  padding: 20px 22px;
+
+  font-size: 16px;
+  font-weight: 500;
+
+  border-radius: 18px;
+
+  border: 1.5px solid rgba(167, 139, 250, 0.28);
+
+  background: rgba(255, 255, 255, 0.85);
+
+  color: #1e293b;
+
+  resize: none;
+  outline: none;
+
+  transition: 0.3s ease;
+  box-sizing: border-box;
+
+  box-shadow:
+    0 6px 20px rgba(167, 139, 250, 0.08);
+}
+
+.humanneeds-textarea::placeholder {
+  color: #3d5f99;
+}
+
+.humanneeds-textarea:focus {
+  border-color: #8b5cf6;
+
+  box-shadow:
+    0 0 0 4px rgba(139, 92, 246, 0.10),
+    0 10px 25px rgba(139, 92, 246, 0.12);
+}
+
+/* 🚀 BUTTON */
+.predict-btn {
+  position: relative;
+  z-index: 2;
+
+  display: block;
+  margin: 18px auto 0;
+
+  padding: 14px 34px;
+
+  border: none;
+  border-radius: 16px;
+
+  background: linear-gradient(
+    135deg,
+    #9333ea,
+    #3b82f6
+  );
+
+  color: white;
+
+  font-size: 17px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.3s ease;
+
+  box-shadow:
+    0 10px 24px rgba(139, 92, 246, 0.24);
+}
+
+.predict-btn:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 14px 28px rgba(139, 92, 246, 0.30);
+}
+
+/* ❌ ERROR */
+.error-text {
+  position: relative;
+  z-index: 2;
+
+  margin-top: 12px;
+
+  color: #ef4444;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* 📊 RESULT HEADING */
+.result-heading {
+  position: relative;
+  z-index: 2;
+
+  margin-top: 26px;
+  margin-bottom: 14px;
+
+  font-size: 24px;
+  font-weight: 800;
+
+  color: #111827;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.result-heading::before {
+  content: "🫧";
+  font-size: 24px;
+}
+
+/* 🚫 NO RESULT CARD */
+.no-result {
+  position: relative;
+  z-index: 2;
+
+  padding: 20px 22px;
+
+  border-radius: 20px;
+
+  background: rgba(255, 255, 255, 0.72);
+
+  border: 1px solid rgba(16, 185, 129, 0.15);
+
+  color: #0f172a;
+
+  font-size: 18px;
+  font-weight: 700;
+
+  box-shadow:
+    0 8px 24px rgba(16, 185, 129, 0.08);
+}
+
+/* 📈 CHART CARD */
+.chart-wrapper {
+  position: relative;
+  z-index: 2;
+
+  margin-top: 12px;
+
+  padding: 20px;
+
+  border-radius: 24px;
+
+  background: rgba(255, 255, 255, 0.82);
+
+  border: 1px solid rgba(255, 255, 255, 0.7);
+
+  box-shadow:
+    0 8px 24px rgba(140, 120, 255, 0.10);
+}
+
+/* ✨ CHART HOVER */
+.chart-wrapper:hover {
+  transform: translateY(-2px);
+  transition: 0.3s ease;
+}
+
+/* 📱 RESPONSIVE */
+@media (max-width: 768px) {
+
+  .humanneeds-container {
+    margin: 12px;
+    padding: 22px 18px;
+  }
+
+  .humanneeds-title {
+    font-size: 24px;
+    line-height: 1.3;
+  }
+
+  .humanneeds-title::after {
+    font-size: 12px;
+  }
+
+  .humanneeds-textarea {
+    min-height: 80px;
+    font-size: 15px;
+  }
+
+  .predict-btn {
+    width: 100%;
+  }
+
+  .result-heading {
+    font-size: 20px;
+  }
+
+  .chart-wrapper {
+    padding: 12px;
+  }
+
+  .back-btn-wrapper {
+    left: -2px;
+    top: 0;
+    transform: scale(0.8);
+  }
+}
+
+/* ✍️ TEXTAREA WRAPPER */
+.textarea-wrapper {
+  position: relative;
+  z-index: 2;
+}
+
+/* ✨ TEXTAREA ICON */
+.textarea-icon {
+  position: absolute;
+
+  right: 18px;
+  bottom: 16px;
+
+  font-size: 24px;
+
+  background: linear-gradient(
+    135deg,
+    #0a0112,
+    #03152b
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  pointer-events: none;
+
+  opacity: 0.95;
+}
+
+/* 🚫 RESULT CARD */
+.no-result-card {
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  align-items: center;
+  gap: 18px;
+
+  padding: 24px;
+
+  border-radius: 22px;
+
+  background: rgba(255, 255, 255, 0.75);
+
+  border: 1px solid rgba(16, 185, 129, 0.14);
+
+  box-shadow:
+    0 10px 26px rgba(16, 185, 129, 0.08);
+
+  backdrop-filter: blur(12px);
+}
+
+/* ✅ ROUND ICON */
+.result-icon {
+  width: 64px;
+  height: 64px;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 28px;
+  font-weight: bold;
+
+  color: #10b981;
+
+  background: rgba(16, 185, 129, 0.10);
+
+  border: 1px solid rgba(16, 185, 129, 0.14);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.6);
+}
+
+/* 📝 RESULT CONTENT */
+.result-content {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 🏷 LABEL */
+.result-label {
+  font-size: 15px;
+  font-weight: 700;
+
+  color: #10b981;
+
+  margin-bottom: 4px;
+}
+
+/* 🚫 NO RESULT TEXT */
+.no-result {
+  margin: 0;
+
+  font-size: 18px;
+  font-weight: 800;
+
+  color: #1e293b;
+}

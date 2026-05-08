@@ -1,0 +1,2 @@
+id,lat,lon,disaster_type,severity,description,timestamp,status,source
+1,19.118347667071216,72.91085243225099,storm,Moderate,edcwerwv,2026-03-10T05:14:28.367598,approved,live_risk_page

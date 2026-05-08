@@ -1,0 +1,38 @@
+# All Libraries Used in Final Project
+
+## Development Tools
+- concurrently (for running multiple scripts)
+
+## Backend (Node.js)
+- axios
+- cors
+- dotenv
+- express
+- mongoose
+- csv-parser
+
+## Frontend (React)
+- @testing-library/dom
+- @testing-library/jest-dom
+- @testing-library/react
+- @testing-library/user-event
+- leaflet (for maps)
+- lucide-react
+- react
+- react-dom
+- react-leaflet (React wrapper for Leaflet maps)
+- react-router-dom
+- react-scripts
+- recharts
+- web-vitals
+
+## Additional Frontend Libraries (from other variants)
+- socket.io
+- socket.io-client
+
+## ML Model (Python)
+- flask
+- flask-cors
+- joblib
+- pandas
+- scikit-learn

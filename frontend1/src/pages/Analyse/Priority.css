@@ -1,0 +1,272 @@
+/* 🌈 PAGE */
+body {
+  margin: 0;
+  padding: 0;
+
+  font-family: "Poppins", sans-serif;
+
+  background:
+    linear-gradient(
+      135deg,
+      #e9d5ff 0%,
+      #dbeafe 40%,
+      #fbcfe8 75%,
+      #fae8ff 100%
+    );
+
+  min-height: 100vh;
+}
+
+/* 🌟 MAIN CONTAINER */
+.priority-container {
+  min-height: 100vh;
+
+  padding: 24px;
+
+  position: relative;
+  overflow: hidden;
+}
+
+/* ✨ TOP RIGHT GLOW */
+.priority-container::before {
+  content: "";
+
+  position: absolute;
+
+  top: -140px;
+  right: -120px;
+
+  width: 420px;
+  height: 420px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(147, 51, 234, 0.28),
+      transparent 70%
+    );
+
+  filter: blur(25px);
+
+  z-index: 0;
+}
+
+/* ✨ BOTTOM LEFT GLOW */
+.priority-container::after {
+  content: "";
+
+  position: absolute;
+
+  bottom: -140px;
+  left: -120px;
+
+  width: 380px;
+  height: 380px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(236, 72, 153, 0.22),
+      transparent 70%
+    );
+
+  filter: blur(25px);
+
+  z-index: 0;
+}
+
+/* 🌟 CONTENT ABOVE */
+.priority-container > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* 🚨 TITLE */
+.priority-title {
+  text-align: center;
+
+  font-size: 42px;
+  font-weight: 800;
+
+  color: #111827;
+
+  margin-bottom: 26px;
+}
+
+/* 📦 CARDS */
+.priority-card,
+.priority-result-card,
+.priority-map {
+  background: rgba(255, 255, 255, 0.72);
+
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+
+  border: 1px solid rgba(255, 255, 255, 0.7);
+
+  border-radius: 28px;
+
+  padding: 28px;
+
+  margin-bottom: 24px;
+
+  box-shadow:
+    0 10px 35px rgba(139, 92, 246, 0.10),
+    inset 0 1px 0 rgba(255,255,255,0.5);
+}
+
+/* ✍️ TEXTAREA */
+.priority-textarea {
+  width: 100%;
+
+  min-height: 130px;
+
+  padding: 18px;
+
+  border-radius: 18px;
+
+  border: 1.5px solid rgba(167, 139, 250, 0.25);
+
+  background: rgba(255,255,255,0.82);
+
+  font-size: 15px;
+  font-family: inherit;
+
+  resize: none;
+  outline: none;
+
+  margin-bottom: 16px;
+
+  transition: 0.3s ease;
+
+  box-sizing: border-box;
+}
+
+/* 📍 INPUT */
+.priority-input {
+  width: 100%;
+
+  padding: 16px 18px;
+
+  border-radius: 18px;
+
+  border: 1.5px solid rgba(167, 139, 250, 0.25);
+
+  background: rgba(255,255,255,0.82);
+
+  font-size: 15px;
+
+  outline: none;
+
+  margin-bottom: 18px;
+
+  transition: 0.3s ease;
+
+  box-sizing: border-box;
+}
+
+/* ✨ FOCUS */
+.priority-textarea:focus,
+.priority-input:focus {
+  border-color: #8b5cf6;
+
+  background: white;
+
+  box-shadow:
+    0 0 0 4px rgba(139, 92, 246, 0.10),
+    0 10px 25px rgba(139, 92, 246, 0.10);
+}
+
+/* 🚀 BUTTON */
+.priority-button {
+  width: 100%;
+
+  padding: 16px;
+
+  border: none;
+  border-radius: 18px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #9333ea,
+      #3b82f6
+    );
+
+  color: white;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.3s ease;
+
+  box-shadow:
+    0 10px 25px rgba(139, 92, 246, 0.22);
+}
+
+/* ✨ BUTTON HOVER */
+.priority-button:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 14px 30px rgba(139, 92, 246, 0.28);
+}
+
+/* 📊 RESULT */
+.priority-result-card h2,
+.priority-map h2 {
+  margin-top: 0;
+
+  color: #111827;
+}
+
+/* ⚡ ACTIONS */
+.priority-result-card ul {
+  padding-left: 22px;
+}
+
+.priority-result-card li {
+  margin-bottom: 10px;
+
+  color: #374151;
+}
+
+/* 🗺️ MAP */
+.priority-iframe {
+  border: none;
+  border-radius: 18px;
+}
+
+/* 📱 RESPONSIVE */
+@media (max-width: 768px) {
+
+  .priority-title {
+    font-size: 30px;
+  }
+
+  .priority-card,
+  .priority-result-card,
+  .priority-map {
+    padding: 20px;
+  }
+}
+
+/* 🔥 HEADER */
+.priority-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  margin-bottom:24px;
+}
+
+/* EMPTY SPACE FOR BALANCE */
+.priority-header-space{
+  width:40px;
+}
