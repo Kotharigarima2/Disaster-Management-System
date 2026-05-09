@@ -2,7 +2,7 @@ const axios = require("axios");
 
 exports.getNeeds = async (req, res) => {
   try {
-    const response = await axios.post("http://localhost:8000/predict", {
+    const response = await axios.post("http://localhost:5001/predict", {
       text: req.body.text,
     });
 

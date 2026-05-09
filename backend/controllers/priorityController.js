@@ -2,7 +2,7 @@ const axios = require("axios");
 
 exports.analyzePriority = async (req, res) => {
   try {
-    const response = await axios.post("http://127.0.0.1:5002/analyze", {
+    const response = await axios.post("http://127.0.0.1:5001/analyze", {
       tweets: req.body.tweets,
       city: req.body.city,
     });

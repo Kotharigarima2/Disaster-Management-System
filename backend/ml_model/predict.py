@@ -4,8 +4,12 @@ import re
 # =========================
 # 🔹 Load Model & Vectorizer
 # =========================
-model = joblib.load("model/model.pkl")
-vectorizer = joblib.load("model/vectorizer.pkl")
+import os
+
+BASE_DIR = os.path.dirname(__file__)
+
+model = joblib.load(os.path.join(BASE_DIR, "model", "model.pkl"))
+vectorizer = joblib.load(os.path.join(BASE_DIR, "model", "vectorizer.pkl"))
 
 # =========================
 # 🔹 Clean Text

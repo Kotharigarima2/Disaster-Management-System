@@ -46,7 +46,7 @@ function HumanNeeds() {
     try {
 
       const res = await axios.post(
-        "http://127.0.0.1:8000/predict",
+        "http://127.0.0.1:5001/predict",
         { text }
       );
 
@@ -54,7 +54,7 @@ function HumanNeeds() {
 
     } catch (err) {
 
-      setError("Backend not running on port 8000");
+      setError("Backend not running on port 5001");
       setNeeds([]);
 
     } finally {

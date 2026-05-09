@@ -1,5 +1,5 @@
 from load_data import load_data
-from map_data import generate_location_data
+from ml_model_3.map_data import generate_location_data
 
 # Load dataset
 train_df, dev_df, test_df = load_data()

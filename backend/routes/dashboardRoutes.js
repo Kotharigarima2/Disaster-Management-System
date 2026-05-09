@@ -2,7 +2,10 @@ const express = require("express");
 const router = express.Router();
 const axios = require("axios");
 
-// 🔥 STRONG REALISTIC DATA (30 tweets)
+// ✅ SINGLE FLASK SERVER
+const ML_BASE = "http://127.0.0.1:5001";
+
+// 🔥 FULL DATA (UNCHANGED)
 const manualDisasterData = [
   { location: "Delhi", tweet: "Severe flood in Delhi, people stuck on rooftops need rescue boats and food" },
   { location: "Mumbai", tweet: "Heavy flooding in Mumbai, urgent need for clean drinking water and shelter" },
@@ -41,49 +44,79 @@ const manualDisasterData = [
   { location: "Kolkata", tweet: "Cyclone warning, stay safe" }
 ];
 
+
+
 router.get("/", async (req, res) => {
   try {
+
     const tweets = manualDisasterData.map(item => item.tweet);
 
     // =========================
-    // 🔥 PRIORITY API
+    // 🔥 PRIORITY + DISASTER (PER TWEET)
     // =========================
-    const priorityRes = await axios.post("http://127.0.0.1:5002/analyze", {
-      tweets,
-      city: "India"
+    const promises = tweets.map(tweet =>
+      axios.post(`${ML_BASE}/analyze`, {
+        tweets: [tweet],
+        city: "India"
+      })
+    );
+
+    const results = await Promise.all(promises);
+
+    // ✅ PRIORITY COUNT
+    const priorityStats = { HIGH: 0, MEDIUM: 0, LOW: 0 };
+
+    results.forEach(r => {
+      const p = r.data.priority;
+      if (priorityStats[p] !== undefined) {
+        priorityStats[p]++;
+      }
     });
 
-    const priorityStats = {
-      HIGH: priorityRes.data.priority === "HIGH" ? 1 : 0,
-      MEDIUM: priorityRes.data.priority === "MEDIUM" ? 1 : 0,
-      LOW: priorityRes.data.priority === "LOW" ? 1 : 0
-    };
+    // =========================
+    // 🌪️ DISASTER TYPE (ML)
+    // =========================
+    const disasterData = manualDisasterData.map((item, index) => ({
+      location: item.location,
+      disaster: results[index].data.predictions[0], // ✅ FIX
+      tweet: item.tweet
+    }));
 
     // =========================
-    // 🔥 NEEDS API
+    // 🧑 NEEDS (ML)
     // =========================
+    const needResponses = await Promise.all(
+      tweets.map(tweet =>
+        axios.post(`${ML_BASE}/predict`, { text: tweet })
+      )
+    );
+
     const allNeeds = new Set();
-    for (let tweet of tweets) {
-      const resNeed = await axios.post("http://127.0.0.1:8000/predict", { text: tweet });
-      (resNeed.data.needs || []).forEach(n => allNeeds.add(n));
-    }
+
+    needResponses.forEach(res => {
+      (res.data.needs || []).forEach(n => allNeeds.add(n));
+    });
+
     const needsList = Array.from(allNeeds);
 
     // =========================
-    // 🔥 DISASTER TYPES
+    // 📍 TOP LOCATIONS
     // =========================
-    const disasterData = manualDisasterData.map(item => {
-      const t = item.tweet.toLowerCase();
-      let disaster = "Other";
-      if (t.includes("flood")) disaster = "Flood";
-      else if (t.includes("fire")) disaster = "Fire";
-      else if (t.includes("cyclone")) disaster = "Cyclone";
-      else if (t.includes("heatwave")) disaster = "Heatwave";
-      return { location: item.location, disaster, tweet: item.tweet };
+    const locationCounts = {};
+
+    manualDisasterData.forEach(item => {
+      locationCounts[item.location] =
+        (locationCounts[item.location] || 0) + 1;
     });
 
     // =========================
-    res.json({ disaster: disasterData, priority: priorityStats, needs: needsList });
+    // ✅ FINAL RESPONSE
+    // =========================
+    res.json({
+      disaster: disasterData,
+      priority: priorityStats,
+      needs: needsList
+    });
 
   } catch (err) {
     console.error("Dashboard error:", err.message);

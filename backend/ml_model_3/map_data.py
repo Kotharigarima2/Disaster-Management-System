@@ -1,6 +1,6 @@
 import pandas as pd
-from predict import predict_disaster
-from locations import extract_locations
+from ml_model_3.predict import predict_disaster
+from ml_model_3.locations import extract_locations
 
 def generate_location_data(df):
     results = []

@@ -3,13 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "frontend": "cd frontend1 && npm start",
-    "backend": "cd backend && node server.js",
-    "ml1": "cd backend/ml_model && python app.py",
-    "ml2": "cd backend/ml_model_2 && python app.py",
-    "ml3": "cd backend/ml_model_3 && python app.py",
-    "dev": "concurrently --names \"ML1,ML2,ML3,FRONTEND,BACKEND\" --prefix-colors \"blue,cyan,yellow,green,magenta\" \"npm run ml1\" \"npm run ml2\" \"npm run ml3\" \"npm run frontend\" \"npm run backend\""
-  },
+  "frontend": "cd frontend1 && npm start",
+  "backend": "cd backend && node server.js",
+  "ml": "cd backend && python app.py",
+  "dev": "concurrently \"npm run ml\" \"npm run frontend\" \"npm run backend\""
+},
   "devDependencies": {
     "concurrently": "^8.2.0"
   },

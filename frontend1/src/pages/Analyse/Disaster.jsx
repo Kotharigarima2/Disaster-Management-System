@@ -16,7 +16,7 @@ const Disaster = () => {
 
   useEffect(() => {
 
-    axios.get("http://localhost:5000/api/disaster")
+    axios.get("http://localhost:5001/disaster-data")
 
       .then(res => {
 

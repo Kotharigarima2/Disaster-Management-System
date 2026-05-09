@@ -17,7 +17,7 @@ function Priority() {
     try {
 
       const response = await fetch(
-        "http://localhost:5000/api/priority",
+        "http://localhost:5001/analyze",
         {
           method: "POST",
 
