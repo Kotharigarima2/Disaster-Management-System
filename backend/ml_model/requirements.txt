@@ -1,5 +1,5 @@
 flask
 flask-cors
-joblib
-pandas
+requests
 scikit-learn
+nltk

@@ -1,13 +1,17 @@
 import pickle
-from ml_model_2.preprocessing import clean_text
-import os
+from .preprocessing import clean_text
+
 # Load model
+import os
+import pickle
+from .preprocessing import clean_text
+
 BASE_DIR = os.path.dirname(__file__)
 
 model_path = os.path.join(BASE_DIR, "model.pkl")
+vectorizer_path = os.path.join(BASE_DIR, "vectorizer.pkl")
 
 model = pickle.load(open(model_path, "rb"))
-vectorizer_path = os.path.join(BASE_DIR, "vectorizer.pkl")
 vectorizer = pickle.load(open(vectorizer_path, "rb"))
 
 def keyword_override(text):
