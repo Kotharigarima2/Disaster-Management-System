@@ -28,10 +28,10 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 # IMPORT ML MODELS
 # =====================================================
 
-# MODEL 1 → HUMAN NEED DETECTION
+# MODEL 1 → HUMANITARIAN NEED DETECTION
 from ml_model.predict import predict
 
-# MODEL 2 → DISASTER + PRIORITY ANALYSIS
+# MODEL 2 → DISASTER CLASSIFICATION + PRIORITY
 from ml_model_2.predict import predict_disaster
 
 from ml_model_2.priority_engine import (
@@ -52,21 +52,25 @@ from ml_model_3.load_data import load_data
 from ml_model_3.map_data import generate_location_data
 
 # =====================================================
-# LIVE NEWS FETCHER
+# NEWS API CONFIG
 # =====================================================
 
 API_KEY = "2d04ecb3a2c44280832f5fce6ab3da47"
 
+# =====================================================
+# FETCH LIVE NEWS
+# =====================================================
 
 def fetch_live_news():
 
-    print("\n========== FETCHING NEWS ==========\n")
+    print("\n========== FETCHING LIVE NEWS ==========\n")
 
     url = (
         f"https://newsapi.org/v2/everything?"
-        f"q=disaster OR flood OR earthquake OR fire"
+        f"q=disaster OR flood OR earthquake OR fire OR cyclone"
         f"&language=en"
         f"&sortBy=publishedAt"
+        f"&pageSize=20"
         f"&apiKey={API_KEY}"
     )
 
@@ -92,6 +96,7 @@ def fetch_live_news():
             title = article.get("title", "")
 
             if title:
+
                 articles.append(title)
 
     print("\nFETCHED ARTICLES:")
@@ -110,21 +115,30 @@ def fetch_live_news():
 def home():
 
     return jsonify({
+
         "status": "running",
+
         "message": "Disaster Management Backend API Live",
+
         "available_routes": {
+
             "health": "/health",
+
             "human_need_prediction": "/predict",
+
             "priority_analysis": "/analyze",
+
             "dashboard_data": "/disaster-data",
+
             "test_live": "/test-live",
+
             "live_analysis": "/live-analysis"
         }
     })
 
 
 # =====================================================
-# HEALTH CHECK ROUTE
+# HEALTH CHECK
 # =====================================================
 
 @app.route("/health", methods=["GET"])
@@ -133,7 +147,7 @@ def health_check():
     return jsonify({
         "success": True,
         "server": "active"
-    }), 200
+    })
 
 
 # =====================================================
@@ -144,9 +158,13 @@ def health_check():
 def test_live():
 
     tweets = [
+
         "Massive flood situation near Yamuna river",
+
         "People trapped and need rescue",
+
         "Urgent medical supplies required",
+
         "Heavy rainfall destroying homes"
     ]
 
@@ -156,30 +174,40 @@ def test_live():
 
         disaster_result = predict_disaster(tweet)
 
-        needs = predict(tweet)
+        # ONLY PROCESS DISASTER NEWS
+        if disaster_result == "Disaster":
 
-        priority_score = calculate_priority(
-            1,
-            1,
-            2,
-            [tweet]
-        )
+            needs = predict(tweet)
 
-        priority_level = get_priority_level(
-            priority_score
-        )
+            priority_score = calculate_priority(
+                1,
+                1,
+                2,
+                [tweet]
+            )
 
-        final_results.append({
-            "tweet": tweet,
-            "disaster_prediction": disaster_result,
-            "humanitarian_needs": needs,
-            "priority_score": priority_score,
-            "priority_level": priority_level
-        })
+            priority_level = get_priority_level(
+                priority_score
+            )
+
+            final_results.append({
+
+                "news": tweet,
+
+                "priority_level": priority_level,
+
+                "priority_score": priority_score,
+
+                "humanitarian_needs": needs
+            })
 
     return jsonify({
+
         "success": True,
-        "results": final_results
+
+        "total_disasters": len(final_results),
+
+        "disasters": final_results
     })
 
 
@@ -194,75 +222,125 @@ def live_analysis():
 
         tweets = fetch_live_news()
 
-        final_results = []
+        disaster_results = []
 
         disaster_count = 0
 
+        # ---------------------------------------------
+        # PROCESS NEWS
+        # ---------------------------------------------
+
         for tweet in tweets:
 
-            logger.info(f"Incoming News: {tweet}")
+            logger.info(f"Checking News: {tweet}")
 
-            # Disaster Prediction
+            # STEP 1 → DISASTER CHECK
             disaster_result = predict_disaster(tweet)
 
             logger.info(
-                f"Disaster Prediction: {disaster_result}"
+                f"Prediction Result: {disaster_result}"
             )
+
+            # -----------------------------------------
+            # ONLY IF DISASTER
+            # -----------------------------------------
 
             if disaster_result == "Disaster":
+
                 disaster_count += 1
 
-            # Humanitarian Needs
-            needs = predict(tweet)
+                # STEP 2 → HUMANITARIAN NEEDS
+                needs = predict(tweet)
 
-            logger.info(
-                f"Humanitarian Needs: {needs}"
-            )
+                logger.info(
+                    f"Humanitarian Needs: {needs}"
+                )
 
-            final_results.append({
-                "tweet": tweet,
-                "disaster_prediction": disaster_result,
-                "humanitarian_needs": needs
-            })
+                # STEP 3 → PRIORITY
+                priority_score = calculate_priority(
+                    1,
+                    1,
+                    2,
+                    [tweet]
+                )
 
-        total = len(tweets)
+                priority_level = get_priority_level(
+                    priority_score
+                )
+
+                logger.info(
+                    f"Priority Level: {priority_level}"
+                )
+
+                # STEP 4 → STORE RESULT
+                disaster_results.append({
+
+                    "news": tweet,
+
+                    "priority_level": priority_level,
+
+                    "priority_score": priority_score,
+
+                    "humanitarian_needs": needs
+                })
+
+            # -----------------------------------------
+            # IF NOT DISASTER → IGNORE
+            # -----------------------------------------
+
+            else:
+
+                logger.info(
+                    "Non-disaster news ignored"
+                )
+
+        # ---------------------------------------------
+        # OVERALL ANALYSIS
+        # ---------------------------------------------
+
+        total_news = len(tweets)
 
         disaster_ratio = (
-            disaster_count / total
-            if total > 0 else 0
+
+            disaster_count / total_news
+
+            if total_news > 0 else 0
         )
 
-        weather_severity = 2
+        overall_priority_score = calculate_priority(
 
-        priority_score = calculate_priority(
             disaster_count,
+
             disaster_ratio,
-            weather_severity,
+
+            2,
+
             tweets
         )
 
-        priority_level = get_priority_level(
-            priority_score
+        overall_priority_level = get_priority_level(
+            overall_priority_score
         )
 
-        logger.info(
-            f"Priority Level: {priority_level}"
-        )
+        # ---------------------------------------------
+        # FINAL RESPONSE
+        # ---------------------------------------------
 
         return jsonify({
+
             "success": True,
 
-            "fetched_news": tweets,
+            "total_news_fetched": total_news,
 
-            "total_news": total,
+            "total_disasters_detected": disaster_count,
 
-            "disaster_count": disaster_count,
+            "overall_priority_level":
+                overall_priority_level,
 
-            "priority_score": priority_score,
+            "overall_priority_score":
+                overall_priority_score,
 
-            "priority_level": priority_level,
-
-            "results": final_results
+            "disasters": disaster_results
         })
 
     except Exception as e:
@@ -272,13 +350,15 @@ def live_analysis():
         )
 
         return jsonify({
+
             "success": False,
+
             "error": str(e)
         })
 
 
 # =====================================================
-# ROUTE 1 → HUMAN NEED DETECTION
+# HUMANITARIAN NEED PREDICTION
 # =====================================================
 
 @app.route("/predict", methods=["POST"])
@@ -291,7 +371,9 @@ def predict_route():
         if not data:
 
             return jsonify({
+
                 "success": False,
+
                 "error": "No JSON data received"
             }), 400
 
@@ -300,21 +382,22 @@ def predict_route():
         if not text:
 
             return jsonify({
+
                 "success": False,
+
                 "error": "Text field is required"
             }), 400
-
-        logger.info(
-            f"Human Need Prediction Request: {text}"
-        )
 
         needs = predict(text)
 
         return jsonify({
+
             "success": True,
+
             "input": text,
+
             "needs": needs
-        }), 200
+        })
 
     except Exception as e:
 
@@ -323,13 +406,15 @@ def predict_route():
         )
 
         return jsonify({
+
             "success": False,
+
             "error": str(e)
-        }), 500
+        })
 
 
 # =====================================================
-# ROUTE 2 → DISASTER PRIORITY ANALYSIS
+# PRIORITY ANALYSIS
 # =====================================================
 
 @app.route("/analyze", methods=["POST"])
@@ -342,17 +427,22 @@ def analyze():
         if not data:
 
             return jsonify({
+
                 "success": False,
+
                 "error": "No JSON data received"
             }), 400
 
         tweets = data.get("tweets", [])
+
         city = data.get("city", "Unknown")
 
-        if not tweets or not isinstance(tweets, list):
+        if not tweets:
 
             return jsonify({
+
                 "success": False,
+
                 "error": "Tweets list is required"
             }), 400
 
@@ -364,13 +454,16 @@ def analyze():
 
             result = predict_disaster(tweet)
 
-            predictions.append({
-                "tweet": tweet,
-                "prediction": result
-            })
-
             if result == "Disaster":
+
                 disaster_count += 1
+
+                predictions.append({
+
+                    "tweet": tweet,
+
+                    "prediction": result
+                })
 
         total = len(tweets)
 
@@ -384,9 +477,13 @@ def analyze():
         )
 
         score = calculate_priority(
+
             disaster_count,
+
             disaster_ratio,
+
             weather_severity,
+
             tweets
         )
 
@@ -394,27 +491,24 @@ def analyze():
 
         actions = get_action(priority)
 
-        response = {
+        return jsonify({
+
             "success": True,
+
             "city": city,
+
             "total_tweets": total,
+
             "disaster_count": disaster_count,
-            "disaster_ratio": round(
-                disaster_ratio,
-                2
-            ),
-            "weather_severity": weather_severity,
-            "priority_score": score,
+
             "priority_level": priority,
+
+            "priority_score": score,
+
             "recommended_actions": actions,
-            "tweet_predictions": predictions
-        }
 
-        logger.info(
-            f"Priority Analysis Completed for {city}"
-        )
-
-        return jsonify(response), 200
+            "disaster_predictions": predictions
+        })
 
     except Exception as e:
 
@@ -423,13 +517,15 @@ def analyze():
         )
 
         return jsonify({
+
             "success": False,
+
             "error": str(e)
-        }), 500
+        })
 
 
 # =====================================================
-# ROUTE 3 → LIVE DASHBOARD DATA
+# DASHBOARD DATA
 # =====================================================
 
 @app.route("/disaster-data", methods=["GET"])
@@ -444,12 +540,15 @@ def get_disaster_data():
         )
 
         return jsonify({
+
             "success": True,
+
             "count": len(generated_df),
+
             "data": generated_df.to_dict(
                 orient="records"
             )
-        }), 200
+        })
 
     except Exception as e:
 
@@ -458,20 +557,24 @@ def get_disaster_data():
         )
 
         return jsonify({
+
             "success": False,
+
             "error": str(e)
-        }), 500
+        })
 
 
 # =====================================================
-# GLOBAL ERROR HANDLER
+# ERROR HANDLERS
 # =====================================================
 
 @app.errorhandler(404)
 def not_found(error):
 
     return jsonify({
+
         "success": False,
+
         "error": "Route not found"
     }), 404
 
@@ -480,13 +583,15 @@ def not_found(error):
 def internal_error(error):
 
     return jsonify({
+
         "success": False,
+
         "error": "Internal server error"
     }), 500
 
 
 # =====================================================
-# MAIN ENTRY
+# MAIN
 # =====================================================
 
 if __name__ == "__main__":
@@ -500,7 +605,10 @@ if __name__ == "__main__":
     )
 
     app.run(
+
         host="0.0.0.0",
+
         port=PORT,
+
         debug=True
     )
